@@ -51,3 +51,6 @@ build/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Python packaging
+*.egg-info/

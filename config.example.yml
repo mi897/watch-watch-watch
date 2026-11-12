@@ -1,0 +1,22 @@
+# Copy to config.yml (git-ignored) and edit. No secrets in this file.
+media_root: /media            # path INSIDE the container; host path is set in compose.yaml
+
+# Optional subfolders under media_root. Omit any you do not have.
+libraries:
+  movies: movies
+  shows: shows
+  anime: anime
+  cartoons: cartoons
+
+metadata:
+  language: en
+  country: US
+
+users:
+  - name: alice
+    admin: true
+    password_env: ADMIN_PASSWORD_ALICE   # name of the env var holding the password
+  # - name: kid
+  #   admin: false
+  #   max_rating: PG                     # optional content-rating cap
+  #   libraries: [cartoons]              # optional library restriction

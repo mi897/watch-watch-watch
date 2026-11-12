@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Guidance for Claude (and other AI assistants) working in this repo. Humans: see `CONTRIBUTING.md` (added in Phase 1) and `PROJECT.md`.
+Guidance for Claude (and other AI assistants) working in this repo. Humans: see `CONTRIBUTING.md` and `PROJECT.md`.
 
 ## What this is
 A self-hosted personal streaming platform: **Jellyfin** (unmodified, pinned) plus a small Python **companion service** for bootstrap/provisioning, library-match review, missing-episode tracking, and recommendations. Read `docs/REQUIREMENTS.md` and `docs/PLAN.md` before doing anything. `PROJECT.md` maps where everything lives.
