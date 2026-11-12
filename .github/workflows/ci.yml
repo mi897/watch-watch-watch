@@ -17,6 +17,38 @@ jobs:
       - run: ruff format --check .
       - run: mypy
       - run: pytest
+  integration:
+    runs-on: ubuntu-latest
+    env:
+      JELLYFIN_IMAGE: jellyfin/jellyfin:12.4.20261026-211555@sha256:fea863d0cd9ec445985d9c75fc6ed64e38a1d2766cf0c250a33d553f4fc1b771
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Start pinned Jellyfin (media mounted read-only)
+        run: |
+          mkdir -p "$RUNNER_TEMP/media" "$RUNNER_TEMP/jf-config" "$RUNNER_TEMP/jf-cache"
+          chmod -R 777 "$RUNNER_TEMP"/media "$RUNNER_TEMP"/jf-config "$RUNNER_TEMP"/jf-cache
+          docker run -d --name jf --user 0:0 -p 8096:8096 \
+            -v "$RUNNER_TEMP/jf-config:/config" -v "$RUNNER_TEMP/jf-cache:/cache" \
+            -v "$RUNNER_TEMP/media:$RUNNER_TEMP/media:ro" "$JELLYFIN_IMAGE"
+      - run: pip install -e ".[dev]"
+        working-directory: companion
+      - name: Integration tests
+        working-directory: companion
+        env:
+          JELLYFIN_TEST_URL: http://127.0.0.1:8096
+        run: |
+          export JELLYFIN_TEST_MEDIA="$RUNNER_TEMP/media"
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:8096/System/Info/Public && break; sleep 3; done
+          pytest -m integration -q
+      - if: failure()
+        run: docker logs jf | tail -50
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cp .env.example .env && sed -i 's#^MEDIA_DIR=.*#MEDIA_DIR=/tmp#' .env && touch config.yml && docker compose --profile tools config -q
   hygiene:
     runs-on: ubuntu-latest
     steps:

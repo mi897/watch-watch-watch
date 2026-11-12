@@ -12,19 +12,19 @@ secrets/
 *.pem
 
 # Runtime data
-data/
-config/
-jellyfin/
-sonarr/
-radarr/
-cache/
+/data/
+/config/
+/jellyfin/
+/sonarr/
+/radarr/
+/cache/
 *.db
 *.sqlite
 *.sqlite3
 *.log
 
 # Media (never commit)
-media/
+/media/
 *.mkv
 *.mp4
 *.avi
