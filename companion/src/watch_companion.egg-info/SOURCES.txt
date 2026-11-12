@@ -1,0 +1,7 @@
+pyproject.toml
+src/companion/__init__.py
+src/watch_companion.egg-info/PKG-INFO
+src/watch_companion.egg-info/SOURCES.txt
+src/watch_companion.egg-info/dependency_links.txt
+src/watch_companion.egg-info/requires.txt
+src/watch_companion.egg-info/top_level.txt
