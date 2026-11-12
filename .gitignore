@@ -1,0 +1,53 @@
+# Secrets and real configs (only *.example files are committed)
+.env
+.env.*
+!.env.example
+config.yml
+config.yaml
+config.local.*
+!config.example.yml
+!config.example.yaml
+secrets/
+*.key
+*.pem
+
+# Runtime data
+data/
+config/
+jellyfin/
+sonarr/
+radarr/
+cache/
+*.db
+*.sqlite
+*.sqlite3
+*.log
+
+# Media (never commit)
+media/
+*.mkv
+*.mp4
+*.avi
+*.m4v
+*.srt
+*.ass
+
+# Python / Node / tooling
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+node_modules/
+dist/
+build/
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
