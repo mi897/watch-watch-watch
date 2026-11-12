@@ -36,6 +36,15 @@ class UserConfig(BaseModel):
     libraries: list[str] | None = None
 
 
+class PluginConfig(BaseModel):
+    """A Jellyfin plugin to install. Third-party repositories are an explicit opt-in."""
+
+    model_config = ConfigDict(extra="forbid")
+    name: str = Field(min_length=1)
+    version: str | None = None
+    repository_url: str | None = None
+
+
 class Config(BaseModel):
     model_config = ConfigDict(extra="forbid")
     media_root: str = "/media"
@@ -43,6 +52,7 @@ class Config(BaseModel):
     libraries: dict[str, str] = Field(default_factory=dict)
     metadata: Metadata = Metadata()
     users: list[UserConfig] = Field(default_factory=list)
+    plugins: list[PluginConfig] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def _check(self) -> Config:

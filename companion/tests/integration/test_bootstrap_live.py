@@ -12,6 +12,7 @@ import pytest
 
 from companion.bootstrap import run_bootstrap
 from companion.config import Config
+from companion.doctor import Status, run_doctor
 from companion.jellyfin import JellyfinClient
 
 pytestmark = pytest.mark.integration
@@ -69,5 +70,10 @@ def test_bootstrap_converges_and_is_idempotent(tmp_path: Path) -> None:
         assert opts["SaveLocalMetadata"] is False
         assert opts["MetadataSavers"] == []
         assert opts["SaveSubtitlesWithMedia"] is False
+
+    results = run_doctor(cfg, second_client, env={}, data_dir=tmp_path)
+    failed = {c.name for c in results if c.status is Status.FAIL}
+    # The media dir is a plain host dir in CI, so only these two may legitimately fail.
+    assert failed <= {"media_readonly", "api_key"}, failed
 
     assert tree_hash(media) == before

@@ -3,7 +3,7 @@
 A map of the repository. Update this file whenever files or directories are added, moved or removed.
 
 ## Current state
-Phase 2 (compose + bootstrap). Pinned Jellyfin stack and idempotent `bootstrap` command. Phase status is tracked in `docs/PLAN.md` §3.
+Phase 3 (doctor, docs, optional plugins) on top of the Phase 2 stack and `bootstrap`. Phase status is tracked in `docs/PLAN.md` §3.
 
 ## Top level
 | Path | Purpose |
@@ -25,6 +25,7 @@ Phase 2 (compose + bootstrap). Pinned Jellyfin stack and idempotent `bootstrap` 
 |------|---------|
 | `docs/REQUIREMENTS.md` | Refined requirements, hard rules as testable checks, gaps and risks |
 | `docs/PLAN.md` | Architecture, repo layout, phases with acceptance criteria, testing approach, resolved decisions |
+| `docs/QUICKSTART.md`, `CONFIGURATION.md`, `NAMING.md`, `ANIME.md`, `REMOTE-ACCESS.md`, `DEVICES.md`, `PLATFORMS.md`, `HARDWARE-TRANSCODING.md`, `TROUBLESHOOTING.md` | User guides |
 | `docs/BOOTSTRAP.md` | What bootstrap does, how to run it, passwords, verified Jellyfin version |
 | `docs/LICENSING.md` | Why Apache-2.0 is compatible with Jellyfin and the other components |
 
@@ -36,7 +37,8 @@ Phase 2 (compose + bootstrap). Pinned Jellyfin stack and idempotent `bootstrap` 
 | `companion/src/companion/config/` | Config schema and loader |
 | `companion/src/companion/jellyfin/` | Jellyfin REST client |
 | `companion/src/companion/bootstrap/` | Reconcile config to Jellyfin |
-| `companion/src/companion/cli.py` | `watch-companion bootstrap` |
+| `companion/src/companion/doctor/` | Health checks, human and JSON output, redaction |
+| `companion/src/companion/cli.py` | `watch-companion bootstrap` and `doctor` |
 | `companion/tests/unit/` | Unit tests |
 | `companion/tests/integration/` | Live-Jellyfin tests (`pytest -m integration`, needs `JELLYFIN_TEST_URL`, `JELLYFIN_TEST_MEDIA`) |
 
@@ -61,4 +63,5 @@ Defined in `docs/PLAN.md` §2: more `docs/` guides, and the companion modules.
 | 0 | `phase-0-planning` | Requirements, plan, licensing, project docs |
 | 1 | `phase-1-scaffolding` | Repo scaffolding, example configs, CI |
 | 2 | `phase-2-compose-bootstrap` | Compose stack, config loader, Jellyfin client, bootstrap |
-| 3+ | see `docs/PLAN.md` | Doctor, review queue, missing episodes, recommendations, hardening |
+| 3 | `phase-3-doctor-docs` | `doctor`, plugin install, user docs |
+| 4+ | see `docs/PLAN.md` | review queue, missing episodes, recommendations, hardening |

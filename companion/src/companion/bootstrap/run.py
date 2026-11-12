@@ -5,6 +5,7 @@ from __future__ import annotations
 import copy
 import os
 import secrets
+import time
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -54,7 +55,7 @@ def _check_media(cfg: Config) -> None:
             raise BootstrapError(f"library '{key}': folder '{p}' is not readable by this user")
 
 
-def _read_key(data_dir: Path, env: Mapping[str, str]) -> str | None:
+def read_key(data_dir: Path, env: Mapping[str, str]) -> str | None:
     if env.get("JELLYFIN_API_KEY"):
         return env["JELLYFIN_API_KEY"]
     f = data_dir / KEY_FILE
@@ -78,7 +79,7 @@ def _password_for(u: UserConfig, env: Mapping[str, str], report: Report) -> str:
 
 
 def _authenticate(jf: JellyfinClient, cfg: Config, env: Mapping[str, str], data_dir: Path) -> None:
-    key = _read_key(data_dir, env)
+    key = read_key(data_dir, env)
     if key:
         jf.use_token(key)
         try:
@@ -170,6 +171,36 @@ def _ensure_users(
             report.changes.append(f"updated policy of user {uc.name}")
 
 
+def _ensure_plugins(jf: JellyfinClient, cfg: Config, report: Report) -> None:
+    """Install configured plugins, then restart Jellyfin once if it asks for it."""
+    if not cfg.plugins:
+        return
+    installed = {p["Name"].lower() for p in jf.plugins()}
+    for pc in cfg.plugins:
+        if pc.name.lower() in installed:
+            continue
+        if pc.repository_url:
+            repos = jf.repositories()
+            if all(r.get("Url") != pc.repository_url for r in repos):
+                jf.set_repositories(
+                    [*repos, {"Name": pc.name, "Url": pc.repository_url, "Enabled": True}]
+                )
+                report.changes.append(f"added plugin repository {pc.repository_url}")
+        try:
+            jf.install_package(pc.name, pc.version, pc.repository_url)
+        except JellyfinError as e:
+            raise BootstrapError(
+                f"could not install plugin '{pc.name}': {e}. Check the name, or set "
+                "repository_url for a third-party repository."
+            ) from e
+        report.changes.append(f"installed plugin {pc.name}")
+    if jf.system_info().get("HasPendingRestart"):
+        jf.restart()
+        report.changes.append("restarted Jellyfin to activate plugins")
+        time.sleep(8)  # let the old process go down before polling
+        jf.wait_ready(180)
+
+
 def run_bootstrap(
     cfg: Config,
     jf: JellyfinClient,
@@ -195,13 +226,14 @@ def run_bootstrap(
 
     lib_ids = _ensure_libraries(jf, cfg, report)
     _ensure_users(jf, cfg, env, lib_ids, report)
+    _ensure_plugins(jf, cfg, report)
 
     key = jf.api_key()
     if key is None:
         key = jf.create_api_key()
         report.api_key_created = True
         report.changes.append("created companion API key")
-    if _read_key(data_dir, {}) != key:
+    if read_key(data_dir, {}) != key:
         _write_key(data_dir, key)
         report.changes.append(f"saved API key to {data_dir / KEY_FILE}")
     return report
