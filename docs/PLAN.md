@@ -1,6 +1,6 @@
 # Plan
 
-Status: **DRAFT, awaiting user approval.** Nothing below is implemented. When the plan changes, update this file first.
+Status: **APPROVED.** Recommendations accepted; v1 is kept deliberately simple. Phases 1+ are in progress or pending. When the plan changes, update this file first.
 
 ## 1. Architecture
 
@@ -86,7 +86,7 @@ Compose with pinned Jellyfin, media `:ro`, loopback binding. Config loader. Jell
 **Acceptance:** from a clean checkout, `docker compose up` + `bootstrap` gives a logged-in-able Jellyfin with the configured libraries; second run is a no-op (test asserts zero mutating calls); wrong media path gives a clear error; checksum of the media tree unchanged. Integration test in CI against the pinned Jellyfin image. **No-media** (stub files).
 
 ### Phase 3, doctor, docs, optional extras
-`doctor` with the F4 checks and `--json`. QUICKSTART, CONFIGURATION, NAMING, REMOTE-ACCESS, DEVICES, PLATFORMS, HARDWARE-TRANSCODING docs. Optional plugin install (pinned list, restarts handled). Optional Sonarr/Radarr compose profile **only if you decide in §9 to keep it**.
+`doctor` with the F4 checks and `--json`. QUICKSTART, CONFIGURATION, NAMING, REMOTE-ACCESS, DEVICES, PLATFORMS, HARDWARE-TRANSCODING docs. Optional plugin install (pinned list, restarts handled). Sonarr/Radarr are dropped from v1 (decision in §9).
 **Acceptance:** each doctor check has a passing and failing test; a reviewer who has never seen the project completes QUICKSTART on Linux without help (your or a volunteer's dry run). **Mostly no-media.**
 
 ### Phase 4, matching review queue
@@ -134,17 +134,19 @@ I have not checked current Jellyfin, TMDB, AniList or Jikan docs in this session
 4. Windows/macOS bind-mount permission and performance problems.
 5. API drift between Jellyfin releases.
 
-## 9. Open questions (one batch, with my recommendation)
+## 9. Decisions (resolved)
 
-1. **Name and license.** Repo is `watch-watch-watch` and already contains Apache-2.0. Keep both? *Recommend: keep Apache-2.0; pick a real project name before the first release.*
-2. **Stack.** Python 3.12 + FastAPI + SQLite + Jinja/HTMX, as above? *Recommend yes.*
-3. **Bootstrap interface.** CLI/container only for v1, setup web UI later? *Recommend yes.*
-4. **Sonarr/Radarr.** Drop from v1 and use our own missing-episode logic (my recommendation, because of the read-only conflict and added services), keep as optional compose profile, or bundle by default?
-5. **Notifications.** In-app list plus generic webhook in v1, email later? Any channel you specifically need?
-6. **Media mount.** Read-only always in v1 (recommended; rename features postponed to a possible opt-in later)?
-7. **Metadata sources and keys.** TMDB plus AniList, keys via `.env` only (recommended). Add TVDB or Jikan?
-8. **Platforms to test first.** Linux x86_64 first (CI), arm64 image built but lightly tested, macOS/Windows documented only? Do you want to dry-run on a specific machine?
-9. **UI.** Separate companion web UI (recommended) vs Jellyfin plugin (C#, version-coupled, higher maintenance)?
-10. **Anime scope.** Accept "documented best effort plus review queue" for v1, rather than promising correct absolute numbering?
-11. **Jellyfin plugins.** Are third-party plugin repositories (needed for AniList/AniDB) acceptable as an opt-in, documented step?
-12. **Repo hosting details.** OK to work on branch `claude/new-session-uoe31j`, and should I commit these docs there? (I have not committed yet.)
+All recommendations were approved by the project owner. "Keep v1 simple" is a standing constraint: when in doubt, cut scope.
+
+1. **Name and license:** keep `watch-watch-watch` and Apache-2.0 (compatibility checked in `docs/LICENSING.md`).
+2. **Stack:** Python 3.12, FastAPI, SQLite, Jinja/HTMX.
+3. **Bootstrap:** CLI/container only. No setup web UI in v1.
+4. **Sonarr/Radarr:** not in v1. Missing episodes use our own logic.
+5. **Notifications:** in-app list plus generic webhook. Email later.
+6. **Media mount:** read-only always in v1.
+7. **Metadata:** TMDB and AniList, keys via `.env` only.
+8. **Platforms:** Linux x86_64 tested first; arm64 built; macOS/Windows documented only.
+9. **UI:** separate companion web UI, no Jellyfin plugin.
+10. **Anime:** documented best effort plus review queue.
+11. **Plugins:** third-party plugin repos are an opt-in, documented step.
+12. **Branch:** work on `claude/new-session-uoe31j`.

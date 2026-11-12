@@ -1,6 +1,6 @@
 # watch-watch-watch
 
-A self-hosted "personal Netflix" built on [Jellyfin](https://jellyfin.org), with a small companion service for provisioning, library-match review, missing-episode tracking, and recommendations.
+A self-hosted personal media server built on [Jellyfin](https://jellyfin.org), with a small companion service for provisioning, library-match review, missing-episode tracking, and recommendations.
 
 **Status: planning.** No code yet. See [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md) and [`docs/PLAN.md`](docs/PLAN.md).
 

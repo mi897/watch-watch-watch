@@ -1,10 +1,10 @@
 # Requirements
 
-Status: **DRAFT, awaiting user approval.** No code exists yet. Items marked **[VERIFY]** are from memory and must be checked against current upstream docs before relying on them. Items marked **[DECISION]** need a user answer (see `PLAN.md` §9).
+Status: **APPROVED (Phase 0).** Decisions in `PLAN.md` §9 are resolved. Keep v1 simple. Items marked **[VERIFY]** are from memory and must be checked against current upstream docs before relying on them. Items marked **[DECISION]** need a user answer (see `PLAN.md` §9).
 
 ## 1. Vision
 
-A public, open-source, self-hosted "personal Netflix". Someone with a folder of mp4/mkv files (movies, TV, anime, cartoons) of messy provenance should be able to point the system at it, create admin accounts, and watch from any device on their local or trusted network.
+A public, open-source, self-hosted personal streaming platform. Someone with a folder of mp4/mkv files (movies, TV, anime, cartoons) of messy provenance should be able to point the system at it, create admin accounts, and watch from any device on their local or trusted network.
 
 **Target experience:** clone, copy `.env.example` and `config.example.yml`, set a few values, `docker compose up -d`, done.
 
