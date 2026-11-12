@@ -20,3 +20,10 @@ users:
   #   admin: false
   #   max_rating: PG                     # optional content-rating cap
   #   libraries: [cartoons]              # optional library restriction
+
+# Optional Jellyfin plugins, installed by bootstrap (Jellyfin restarts once if needed).
+# Third-party repositories are code you choose to trust; see docs/ANIME.md.
+# plugins:
+#   - name: AniList
+#     # version: 1.2.3.4
+#     # repository_url: https://example.com/manifest.json   # only for third-party repos

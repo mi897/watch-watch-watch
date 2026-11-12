@@ -154,3 +154,26 @@ class JellyfinClient:
         if key is None:
             raise JellyfinError("API key was created but not found in /Auth/Keys")
         return key
+
+    # -- system and plugins ---------------------------------------------------
+    def system_info(self) -> dict[str, Any]:
+        out: dict[str, Any] = self.get("/System/Info")
+        return out
+
+    def plugins(self) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = self.get("/Plugins")
+        return out
+
+    def repositories(self) -> list[dict[str, Any]]:
+        out: list[dict[str, Any]] = self.get("/Repositories")
+        return out
+
+    def set_repositories(self, repos: list[dict[str, Any]]) -> None:
+        self.request("POST", "/Repositories", json=repos)
+
+    def install_package(self, name: str, version: str | None, repo_url: str | None) -> None:
+        params = {k: v for k, v in (("version", version), ("repositoryUrl", repo_url)) if v}
+        self.request("POST", f"/Packages/Installed/{name}", params=params)
+
+    def restart(self) -> None:
+        self.request("POST", "/System/Restart")
