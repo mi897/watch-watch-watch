@@ -149,4 +149,5 @@ All recommendations were approved by the project owner. "Keep v1 simple" is a st
 9. **UI:** separate companion web UI, no Jellyfin plugin.
 10. **Anime:** documented best effort plus review queue.
 11. **Plugins:** third-party plugin repos are an opt-in, documented step.
-12. **Branch:** work on `claude/new-session-uoe31j`.
+12. **Branches:** one descriptive branch per phase (see `CLAUDE.md`).
+13. **Jellyfin version (Phase 2):** pin 12.4 (`12.4.20261026-211555`), the latest stable when Phase 2 started; endpoints verified against its OpenAPI spec. Bootstrap saves its API key to `data/companion/` (0600) instead of editing `.env`.
